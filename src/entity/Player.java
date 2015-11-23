@@ -1,14 +1,25 @@
 package entity;
 
-public class Runner {
+public class Player {
   private static int nextNumber = 1000;
   private String name;
   private int number;
 
-  public Runner(String name) {
+  public Player(){
+      
+  }
+  
+  public Player(String name) {
     this.name = name;
     this.number = nextNumber++;
   }
+
+    public Player(int number, String name ) {
+        this.name = name;
+        this.number = number;
+    }
+  
+  
 
   public String getName() {
     return name;
@@ -31,7 +42,7 @@ public class Runner {
   }
 
   public static void setNextNumber(int nextNumber) {
-    Runner.nextNumber = nextNumber;
+    Player.nextNumber = nextNumber;
   }
     
   @Override

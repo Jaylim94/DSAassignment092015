@@ -9,10 +9,10 @@ public class TestOnly {
 
     public static void main(String[] args) {
         String file_name = "D:\\Jaylim\\Desktop\\test.txt" ; 
-        int testNumber = 100;
+        int testNumber = 101;
         
         
-        //Read from File
+        /*Read from File
         try {
             ReadFile file = new ReadFile(file_name);
             String[] aryLines = file.OpenFile();
@@ -25,12 +25,13 @@ public class TestOnly {
         }catch (IOException e){
             System.out.println(e.getMessage());
         }
+        */
         
-        /* Write into file
+        // Write into file
         try{
             printWriter data = new printWriter(file_name, true);
             
-            for (int a = 0; a<9; a++){
+            for (int a = 0; a<50; a++){
                 data.writeToFile("This is new line yoh " + testNumber++ + "\n" );
             }
             
@@ -39,7 +40,7 @@ public class TestOnly {
             System.out.println(ex.getMessage());
         }
        
-        */
+        
     }
     
 }

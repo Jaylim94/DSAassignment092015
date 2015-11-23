@@ -1,6 +1,8 @@
 
 package client;
 
+import controller.ctrlMaintainPlayer;
+import entity.Player;
 import java.util.Random;
 
 /**
@@ -8,10 +10,14 @@ import java.util.Random;
  * @author Jaylim
  */
 public class RaceDriver {
+    Player player = new Player();
+    ctrlMaintainPlayer playerControl = new ctrlMaintainPlayer();
     
-    public static void main(String[] args) {
+    public static void main(String[] args) { 
+        
        for(int i=0; i<50; i++)
         System.out.println(dice());
+       
     }
     
     public static int dice() {
@@ -25,4 +31,8 @@ public class RaceDriver {
 
         return randomNum;
     }
+    
+    
+    
+    
 }
