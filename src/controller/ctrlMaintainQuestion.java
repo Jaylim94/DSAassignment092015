@@ -16,6 +16,10 @@ public class ctrlMaintainQuestion {
         return questionDA.getRecord(id);
     }
     
+    public String getQuestion(int number) {
+        return questionDA.getQuestion(number);
+    }
+    
     public void addRecord(Question q) {
         questionDA.addRecord(q);
     }

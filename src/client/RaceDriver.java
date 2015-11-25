@@ -1,7 +1,7 @@
 
 package client;
 
-import controller.ctrlMaintainPlayer;
+import controller.*;
 import entity.Player;
 import java.util.*;
 
@@ -12,6 +12,7 @@ import java.util.*;
 public class RaceDriver {
     Player player = new Player();
     ctrlMaintainPlayer playerControl = new ctrlMaintainPlayer();
+    gameStart gameStart = new gameStart();
     
     public static void main(String[] args) { 
        
@@ -27,7 +28,7 @@ public class RaceDriver {
                 
                 if(selection.equals("1")){
 	    		registerMember();
-                        gameStart();
+                        //game start
 	    	}else if(selection.equals("2")){
 	    		viewRanking();
 	    	}else if(selection.equals("3")){
@@ -40,17 +41,7 @@ public class RaceDriver {
        // System.out.println(dice()); to roll dice
     }
     
-    public static int dice() {
 
-        Random rand = new Random();
-        int randomNum;
-
-        do{
-            randomNum = rand.nextInt(6) -2 ;
-        }while (randomNum == 0);
-
-        return randomNum;
-    }
     
     
     private static void registerMember() {
@@ -62,9 +53,6 @@ public class RaceDriver {
         
     }
 
-    private static void gameStart() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     private static void viewRanking() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

@@ -48,6 +48,23 @@ public class QuestionDatabase {
         }
         return question;
     }
+    
+    public String getQuestion(int qNumber) {
+        String queryStr = "SELECT QUESTION FROM " + tableName + " WHERE QUESTIONID = ?";
+        String questionQ = "";
+        try {
+            stmt = conn.prepareStatement(queryStr);
+            stmt.setInt(1, qNumber);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                questionQ = rs.getString("QUESTION");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        return questionQ;
+    }
 
     public void updateRecord(Question question) {
         try {
