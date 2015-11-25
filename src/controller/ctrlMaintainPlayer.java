@@ -15,8 +15,8 @@ public class ctrlMaintainPlayer {
         return playerDA.getRecord(id);
     }
     
-    public void addRecord(Player p) {
-        playerDA.addRecord(p);
+    public void addRecord(String name) {
+        playerDA.addRecord(name);
     }
     
     public void updateRecord(Player p) {
@@ -25,6 +25,10 @@ public class ctrlMaintainPlayer {
     
     public void deleteRecord(int id) {
         playerDA.deleteRecord(id);
+    }
+    
+    public boolean checkName(String name){
+        return playerDA.checkName(name);
     }
 
 }

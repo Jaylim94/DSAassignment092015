@@ -10,11 +10,12 @@ import java.util.*;
  * @author Jaylim, ZF
  */
 public class RaceDriver {
-    Player player = new Player();
-    ctrlMaintainPlayer playerControl = new ctrlMaintainPlayer();
-    gameStart gameStart = new gameStart();
     
+
     public static void main(String[] args) { 
+
+       gameStart gameStart = new gameStart();
+       Player player = new Player();
        
        Scanner scan = new Scanner(System.in);
        String selection;
@@ -27,8 +28,9 @@ public class RaceDriver {
                 selection = scan.next();
                 
                 if(selection.equals("1")){
-	    		registerMember();
-                        //game start
+                    
+                    registerMember();
+                    gameStart.run(); //haven save time to member, create new column for member time.
 	    	}else if(selection.equals("2")){
 	    		viewRanking();
 	    	}else if(selection.equals("3")){
@@ -42,14 +44,21 @@ public class RaceDriver {
     }
     
 
-    
-    
     private static void registerMember() {
+        ctrlMaintainPlayer playerControl = new ctrlMaintainPlayer();
+        
         String name;
         Scanner scan = new Scanner(System.in);
         
         System.out.println("\n-Registration-\nPlayer Name:");
         name = scan.nextLine();
+        playerControl.addRecord(name);
+        if (playerControl.checkName(name) == true){
+            System.out.println("Your name has successfully registered. ");
+        }else{
+            System.out.println("Oh no, your name cannot be register. Please try again later.");
+            System.exit(0);
+        }
         
     }
 

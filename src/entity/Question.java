@@ -8,10 +8,10 @@ package entity;
 public class Question {
     int questionID;
     String question;
-    Character answer;
+    int answer;
     String answerStatement;
 
-    public Question(int questionID, String question, Character answer, String answerStatement) {
+    public Question(int questionID, String question, int answer, String answerStatement) {
         this.questionID = questionID;
         this.question = question;
         this.answer = answer;
@@ -29,7 +29,7 @@ public class Question {
         return question;
     }
 
-    public Character getAnswer() {
+    public int getAnswer() {
         return answer;
     }
 
@@ -45,7 +45,7 @@ public class Question {
         this.question = question;
     }
 
-    public void setAnswer(Character answer) {
+    public void setAnswer(int answer) {
         this.answer = answer;
     }
 

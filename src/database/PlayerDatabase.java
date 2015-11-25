@@ -17,16 +17,15 @@ public class PlayerDatabase {
         createConnection();
     }
 
-    public void addRecord(Player player) {
-        String insertStr = "INSERT INTO " + tableName + " VALUES(?, ?)";
+    public void addRecord(String name) {
+        String insertStr = "INSERT INTO " + tableName + " (PLAYERNAME) VALUES(?)";
         try {
             stmt = conn.prepareStatement(insertStr);
-            stmt.setString(1, player.getName());
-            stmt.setInt(2, player.getNumber());
+            stmt.setString(1, name);
 
             stmt.executeUpdate();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR addRecord Player", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -42,9 +41,32 @@ public class PlayerDatabase {
                 player = new Player(number, rs.getString("Name"));
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR getRecord Player", JOptionPane.ERROR_MESSAGE);
         }
         return player;
+    }
+    
+    public boolean checkName(String name) {
+        String queryStr = "SELECT * FROM " + tableName + " WHERE PLAYERNAME = ?";
+        String databaseName ="";
+
+        try {
+            stmt = conn.prepareStatement(queryStr);
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+            
+            databaseName = rs.getString("PLAYERNAME");
+
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR checkName Player", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        if(databaseName == name){
+            return true;
+        }else{
+            return false;
+        }  
     }
 
     public void updateRecord(Player player) {
@@ -58,7 +80,7 @@ public class PlayerDatabase {
             stmt.executeUpdate();
             
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR updateRecord Player", JOptionPane.ERROR_MESSAGE);
             System.out.println("******ERROR: " + ex.getMessage());
         }
     }
@@ -71,16 +93,16 @@ public class PlayerDatabase {
             stmt.executeUpdate();
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR deleteRecord Player", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void createConnection() {
         try {
             conn = DriverManager.getConnection(host, user, password);
-            System.out.println("***TRACE: Connection established.");
+            System.out.println("***TRACE: Connection established for Player Database.");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR CreateConnection Player", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -89,7 +111,7 @@ public class PlayerDatabase {
             try {
                 conn.close();
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR shutdown Player", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

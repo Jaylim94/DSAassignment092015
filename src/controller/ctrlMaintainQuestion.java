@@ -20,6 +20,10 @@ public class ctrlMaintainQuestion {
         return questionDA.getQuestion(number);
     }
     
+    public int getAnswer(int qNo){
+        return questionDA.generateAnswer(qNo);
+    }
+    
     public void addRecord(Question q) {
         questionDA.addRecord(q);
     }

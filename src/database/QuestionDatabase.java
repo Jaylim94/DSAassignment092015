@@ -18,17 +18,16 @@ public class QuestionDatabase {
     }
 
     public void addRecord(Question question) {
-        String insertStr = "INSERT INTO " + tableName + " VALUES(?, ?, ?, ?)";
+        String insertStr = "INSERT INTO " + tableName + " (QUESTION, ANSWER, ANSWERSTATEMENT) VALUES(?, ?, ?)";
         try {
             stmt = conn.prepareStatement(insertStr);
-            stmt.setInt(1, question.getQuestionID());
-            stmt.setString(2, question.getQuestion());
-            stmt.setString(3, question.getAnswer().toString());
-            stmt.setString(4, question.getAnswerStatement());
+            stmt.setString(1, question.getQuestion());
+            stmt.setInt(2, question.getAnswer());
+            stmt.setString(3, question.getAnswerStatement());
 
             stmt.executeUpdate();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR addRecord Question", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -44,7 +43,7 @@ public class QuestionDatabase {
                 question = new Question(qNumber, rs.getString("QUESTION"), rs.getString("ANSWER").charAt(0), rs.getString("ANSWERSTATEMENT"));
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR getRecord Question", JOptionPane.ERROR_MESSAGE);
         }
         return question;
     }
@@ -61,9 +60,27 @@ public class QuestionDatabase {
                 questionQ = rs.getString("QUESTION");
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR getQuestion Question", JOptionPane.ERROR_MESSAGE);
         }
         return questionQ;
+    }
+    
+    public int generateAnswer(int qNo) {
+        String queryStr = "SELECT ANSWER FROM " + tableName + " WHERE QUESTIONID = ?";
+        int answer = 0;
+        
+        try {
+            stmt = conn.prepareStatement(queryStr);
+            stmt.setInt(1, qNo);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                answer = rs.getInt("ANSWER");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR generateAnswer Question", JOptionPane.ERROR_MESSAGE);
+        }
+        return answer;
     }
 
     public void updateRecord(Question question) {
@@ -73,13 +90,13 @@ public class QuestionDatabase {
             stmt = conn.prepareStatement(updateStr);
 
             stmt.setString(1, question.getQuestion());
-            stmt.setString(2, question.getAnswer().toString());
+            stmt.setInt(2, question.getAnswer());
             stmt.setString(3, question.getAnswerStatement());
             stmt.setInt(4, question.getQuestionID());
             stmt.executeUpdate();
             
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR updateRecord Question", JOptionPane.ERROR_MESSAGE);
             System.out.println("******ERROR: " + ex.getMessage());
         }
     }
@@ -92,16 +109,16 @@ public class QuestionDatabase {
             stmt.executeUpdate();
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR deleteRecord Question", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void createConnection() {
         try {
             conn = DriverManager.getConnection(host, user, password);
-            System.out.println("***TRACE: Connection established.");
+            System.out.println("***TRACE: Connection established for Question Database.");
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR createConnection Question", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -110,7 +127,7 @@ public class QuestionDatabase {
             try {
                 conn.close();
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR shutDown Question", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
