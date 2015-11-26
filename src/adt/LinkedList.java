@@ -1,121 +1,136 @@
 package adt;
 
-public class LinkedList<T extends Comparable<? super T>> implements ListInterface<T> {
+public class LinkedList<T> implements StationInterface<T> {
 
-  private Node<T> firstNode;
-  private int numberOfEntries;
+  private Node<T> start = null;
+  private Node<T> end = null;
+  private int numberOfEntries = 0;
 
-  public LinkedList() {
-    firstNode = null;
-    numberOfEntries= 0;
-    clear();
-  }
-
-  public final void clear() {
-    firstNode = null;
-    numberOfEntries = 0;
-  }
-
-  public boolean add(T newEntry) {
-    Node<T> newNode = new Node<>(newEntry);
-
-    if (isEmpty()) {
-      firstNode = newNode;
-    } else {
-      Node<T> lastNode = getNodeAt(numberOfEntries);
-      lastNode.setNext(newNode);
-    }
-
-    numberOfEntries++;
-    return true;
-  }
-
-  public boolean add(int newPosition, T newEntry) {
-    boolean isSuccessful = true;
-
-    if ((newPosition >= 1) && (newPosition <= numberOfEntries + 1)) {
-      Node<T> newNode = new Node<T>(newEntry);
-
-      if (isEmpty() || (newPosition == 1)) {     // case 1: add to beginning of list
-        newNode.setNext(firstNode);
-        firstNode = newNode;
-      } else {					  // case 2: list is not empty and newPosition > 1
-        Node nodeBefore = getNodeAt(newPosition - 1);
-        Node nodeAfter = nodeBefore.getNext();
-        newNode.setNext(nodeAfter);
-        nodeBefore.setNext(newNode);
+      public LinkedList() {
+        start = null;
+        numberOfEntries= 0;
+        clear();
+      }
+      
+      public final void clear() { //not in interface
+        start = null;
+        numberOfEntries = 0;
       }
 
-      numberOfEntries++;
-    } else {
-      isSuccessful = false;
-    }
+      @Override
+      public void addAtStart(T newEntry) {
+        Node<T> newNode = new Node<T>();
 
-    return isSuccessful;
-  }
+        if (isEmpty()) {
+          start = newNode;
+        } else {
+          Node<T> lastNode = getNodeAt(numberOfEntries);
+          lastNode.setNext(newNode);
+        }
 
-  public T remove(int givenPosition) {
-    T result = null;
-
-    if ((givenPosition >= 1) && (givenPosition <= numberOfEntries)) {
-      if (givenPosition == 1) {      // case 1: remove first entry
-        result = firstNode.getData();     // save entry to be removed 
-        firstNode = firstNode.getNext();
-      } else {                         // case 2: givenPosition > 1
-        Node<T> nodeBefore = getNodeAt(givenPosition - 1);
-        Node<T> nodeToRemove = nodeBefore.getNext();
-        Node<T> nodeAfter = nodeToRemove.getNext();
-        nodeBefore.setNext(nodeAfter); // disconnect the node to be removed
-        result = nodeToRemove.getData();  // save entry to be removed
+        numberOfEntries++;
       }
 
-      numberOfEntries--;
-    }
-
-    return result;
-  }
-
-  public boolean replace(int givenPosition, T newEntry) {
-    boolean isSuccessful = true;
-
-    if ((givenPosition >= 1) && (givenPosition <= numberOfEntries)) {
-      Node<T> desiredNode = getNodeAt(givenPosition);
-      desiredNode.setData(newEntry);
-    } else {
-      isSuccessful = false;
-    }
-
-    return isSuccessful;
-  }
-
-  public T getEntry(int givenPosition) {
-    T result = null;
-
-    if ((givenPosition >= 1) && (givenPosition <= numberOfEntries)) {
-      result = getNodeAt(givenPosition).getData();
-    }
-
-    return result;
-  }
-
-  public boolean contains(T anEntry) {
-    boolean found = false;
-    Node<T> currentNode = firstNode;
-
-    while (!found && (currentNode != null)) {
-      if (anEntry.equals(currentNode.getData())) {
-        found = true;
-      } else {
-        currentNode = currentNode.getNext();
+      public void addAtEnd(T entry) {
+          Node<T> eNode = new Node<T>();
+          
+          if(this.start == null){
+              this.end = this.start = eNode;
+          }else{
+              eNode.setPrevious(this.end);
+              this.end.setNext(eNode);
+              this.end = eNode;
+          }
+          
+          ++this.numberOfEntries;
+       
       }
-    }
 
-    return found;
-  }
+      public void removePosition(int position) {
+        if (position == 1) {
+            if (this.numberOfEntries == 1) {
+                this.start = null;
+                this.end = null;
+                this.numberOfEntries = 0;
+                return;
+            }
+            this.start = this.start.getNext();
+            this.start.setPrevious(null);
+            --this.numberOfEntries;
+            return;
+        }
+        
+        if (position == this.numberOfEntries) {
+            this.end = this.end.getPrevious();
+            this.end.setNext(null);
+            --this.numberOfEntries;
+        }
+        
+        Node cNode = this.start.getNext();
+        
+        for (int i = 2; i <= this.numberOfEntries; ++i) {
+            if (i == position) {
+                Node p = cNode.getPrevious();
+                Node n = cNode.getNext();
+                p.setNext(n);
+                n.setPrevious(p);
+                --this.numberOfEntries;
+                return;
+            }
+            cNode = cNode.getNext();
+        }
+      }
 
-  public int getNumberOfEntries() {
-    return numberOfEntries;
-  }
+      public void addAtPosition(T entry, int position) {
+          Node<T> currentNode = new Node<T>();
+          
+          if(position == 1){
+              this.addAtStart(entry);
+          }
+          
+          Node nNode = this.start;
+          
+          for(int i = 2; i <=this.numberOfEntries; i++){
+              if (i == position){
+                  Node tempNode = nNode.getNext();
+                  nNode.setNext(currentNode);
+                  currentNode.setPrevious(tempNode);
+                  currentNode.setNext(tempNode);
+                  tempNode.setPrevious(currentNode);
+              }
+              nNode = nNode.getNext();
+          }
+          ++this.numberOfEntries;
+      }
+
+//  public T getEntry(int givenPosition) {
+//    T result = null;
+//
+//    if ((givenPosition >= 1) && (givenPosition <= numberOfEntries)) {
+//      result = getNodeAt(givenPosition).getData();
+//    }
+//
+//    return result;
+//  }
+
+//  public boolean contains(T anEntry) {
+//    boolean found = false;
+//    Node<T> currentNode = firstNode;
+//
+//    while (!found && (currentNode != null)) {
+//      if (anEntry.equals(currentNode.getData())) {
+//        found = true;
+//      } else {
+//        currentNode = currentNode.getNext();
+//      }
+//    }
+//
+//    return found;
+//  }
+
+//  public int getNumberOfEntries() {
+//    return numberOfEntries;
+//  }
 
   public boolean isEmpty() {
     boolean result;
@@ -128,34 +143,13 @@ public class LinkedList<T extends Comparable<? super T>> implements ListInterfac
 
     return result;
   }
+//
+//  public boolean isFull() {
+//    return false;
+//  }
 
-  public boolean isFull() {
-    return false;
-  }
-
-  public String toString() {
-    String outputStr = "";
-    Node<T> currentNode = firstNode;
-    while (currentNode != null) {
-      outputStr += currentNode.getData() + "\n";;
-      currentNode = currentNode.getNext();
-    }
-    return outputStr;
-  }
-
-  private void displayChain(Node nodeOne) {
-    if (nodeOne != null) {
-      System.out.print(nodeOne.getData() + " ");
-      displayChain(nodeOne.getNext());
-    }
-  }
-
-  /**
-   * Task: Returns a reference to the node at a given position. Precondition:
-   * List is not empty; 1 <= givenPosition <= numberOfEntries.
-   */
-  private Node<T> getNodeAt(int givenPosition) {
-    Node<T> currentNode = firstNode;
+  private Node<T> getNodeAt(int givenPosition) { //not inside interface
+    Node<T> currentNode = start;
 
     // traverse the list to locate the desired node
     for (int counter = 1; counter < givenPosition; counter++) {
@@ -164,20 +158,53 @@ public class LinkedList<T extends Comparable<? super T>> implements ListInterfac
 
     return currentNode;
   }
-
-    @Override
-    public boolean remove(T anEntry) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  
+  
+    public void showResult(){
+        if (this.numberOfEntries == 0) {
+            System.out.println("It is Empty");
+            return;
+        }
+        
+        if (this.start.getNext() == null) {
+            System.out.print(((Station)this.start.getData()).display() + "\n");
+            return;
+        }
+        
+        System.out.print(((Station)this.start.getData()).display() + "\n");
+        Node node = this.start.getNext();
+        
+        while (node.getNext() != null) {
+            System.out.print(((Station)node.getData()).display() + "\n");
+            node = node.getNext();
+        }
+        
+        System.out.print(((Station)node.getData()).display() + "\n");
     }
 
     @Override
-    public int getPosition(T anEntry) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public T getPosition(int position) {
+        if(position < 0 ){
+            return null;
+        }else if(position == 0){
+            return (T)this.start.getNext();
+        }
+        
+        Node point = this.start.getNext();
+        
+        for(int i = 1; i < position; i++){
+            if(point.getNext() == null){
+                return null;
+            }
+            point = point.getNext();
+        }
+        
+        return (T)point.getData();
     }
 
     @Override
     public int getLength() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.numberOfEntries;
     }
 
 }
