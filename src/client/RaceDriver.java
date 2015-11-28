@@ -1,36 +1,46 @@
 
 package client;
 
+
+import adt.PlayerList;
+import adt.PlayerListInterface;
+import adt.StationList;
 import controller.*;
 import entity.Player;
 import java.util.*;
+import adt.StationListInterface;
+import entity.Station;
 
 /**
  *
- * @author Jaylim, ZF
+ * @author Jaylim
  */
 public class RaceDriver {
     
-
+    StationListInterface<Station> stationList = new StationList<>();
+    PlayerListInterface<Player> listPlayer = new PlayerList<>();
+    Player player = new Player();
+    static Scanner scan = new Scanner(System.in);
+    
     public static void main(String[] args) { 
 
        gameStart gameStart = new gameStart();
-       Player player = new Player();
-       
-       Scanner scan = new Scanner(System.in);
+       setStation setStation = new setStation();
+
        String selection;
         
         System.out.println("\n");
-    		System.out.println("1. Register and Start the game");
+    		System.out.println("1. Start the game");
 	    	System.out.println("2. View Ranking");
 	    	System.out.println("3. Exit");
 	    	System.out.print("Selection: ");
                 selection = scan.next();
                 
                 if(selection.equals("1")){
+                    setStation.setStation();
+                    long timeEnd = gameStart.run();
+                    registerMember(timeEnd);
                     
-                    registerMember();
-                    gameStart.run(); //haven save time to member, create new column for member time.
 	    	}else if(selection.equals("2")){
 	    		viewRanking();
 	    	}else if(selection.equals("3")){
@@ -44,7 +54,7 @@ public class RaceDriver {
     }
     
 
-    private static void registerMember() {
+    private static void registerMember(long timeEnd) {
         ctrlMaintainPlayer playerControl = new ctrlMaintainPlayer();
         
         String name;
@@ -52,7 +62,7 @@ public class RaceDriver {
         
         System.out.println("\n-Registration-\nPlayer Name:");
         name = scan.nextLine();
-        playerControl.addRecord(name);
+        playerControl.addRecord(name, timeEnd);
         if (playerControl.checkName(name) == true){
             System.out.println("Your name has successfully registered. ");
         }else{

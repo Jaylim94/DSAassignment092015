@@ -18,12 +18,15 @@ public class QuestionDatabase {
     }
 
     public void addRecord(Question question) {
-        String insertStr = "INSERT INTO " + tableName + " (QUESTION, ANSWER, ANSWERSTATEMENT) VALUES(?, ?, ?)";
+        String insertStr = "INSERT INTO " + tableName + " (QUESTION, CORRECTANSWER, SELECTION1, SELECTION2, SELECTION3, SELECTION4) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             stmt = conn.prepareStatement(insertStr);
             stmt.setString(1, question.getQuestion());
-            stmt.setInt(2, question.getAnswer());
-            stmt.setString(3, question.getAnswerStatement());
+            stmt.setInt(2, question.getCorrentAnswer());
+            stmt.setString(3, question.getSelection1());
+            stmt.setString(4, question.getSelection2());
+            stmt.setString(5, question.getSelection3());
+            stmt.setString(6, question.getSelection4());
 
             stmt.executeUpdate();
         } catch (SQLException ex) {
@@ -40,7 +43,7 @@ public class QuestionDatabase {
             ResultSet rs = stmt.executeQuery();
             
             if (rs.next()) {
-                question = new Question(qNumber, rs.getString("QUESTION"), rs.getString("ANSWER").charAt(0), rs.getString("ANSWERSTATEMENT"));
+                question = new Question(qNumber, rs.getString("QUESTION"), rs.getInt("CORRECTANSWER"), rs.getString("SELECTION1"), rs.getString("SELECTION2"), rs.getString("SELECTION3"), rs.getString("SELECTION4"));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR getRecord Question", JOptionPane.ERROR_MESSAGE);
@@ -65,8 +68,76 @@ public class QuestionDatabase {
         return questionQ;
     }
     
+    public String getAnsState1(int aSnumber) {
+        String queryStr = "SELECT SELECTION1 FROM " + tableName + " WHERE QUESTIONID = ?";
+        String questionQ = "";
+        try {
+            stmt = conn.prepareStatement(queryStr);
+            stmt.setInt(1, aSnumber);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                questionQ = rs.getString("SELECTION1");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR getAnsStatement1 Question", JOptionPane.ERROR_MESSAGE);
+        }
+        return questionQ;
+    }
+    
+    public String getAnsState2(int aSnumber) {
+        String queryStr = "SELECT SELECTION2 FROM " + tableName + " WHERE QUESTIONID = ?";
+        String questionQ = "";
+        try {
+            stmt = conn.prepareStatement(queryStr);
+            stmt.setInt(1, aSnumber);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                questionQ = rs.getString("SELECTION2");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR getAnsStatement2 Question", JOptionPane.ERROR_MESSAGE);
+        }
+        return questionQ;
+    }
+    
+    public String getAnsState3(int aSnumber) {
+        String queryStr = "SELECT SELECTION3 FROM " + tableName + " WHERE QUESTIONID = ?";
+        String questionQ = "";
+        try {
+            stmt = conn.prepareStatement(queryStr);
+            stmt.setInt(1, aSnumber);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                questionQ = rs.getString("SELECTION3");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR getAnsStatement3 Question", JOptionPane.ERROR_MESSAGE);
+        }
+        return questionQ;
+    } 
+    
+    public String getAnsState4(int aSnumber) {
+        String queryStr = "SELECT SELECTION4 FROM " + tableName + " WHERE QUESTIONID = ?";
+        String questionQ = "";
+        try {
+            stmt = conn.prepareStatement(queryStr);
+            stmt.setInt(1, aSnumber);
+            ResultSet rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                questionQ = rs.getString("SELECTION4");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR getAnsStatement4 Question", JOptionPane.ERROR_MESSAGE);
+        }
+        return questionQ;
+    } 
+    
     public int generateAnswer(int qNo) {
-        String queryStr = "SELECT ANSWER FROM " + tableName + " WHERE QUESTIONID = ?";
+        String queryStr = "SELECT CORRECTANSWER FROM " + tableName + " WHERE QUESTIONID = ?";
         int answer = 0;
         
         try {
@@ -75,7 +146,7 @@ public class QuestionDatabase {
             ResultSet rs = stmt.executeQuery();
             
             if (rs.next()) {
-                answer = rs.getInt("ANSWER");
+                answer = rs.getInt("CORRECTANSWER");
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR generateAnswer Question", JOptionPane.ERROR_MESSAGE);
@@ -85,14 +156,17 @@ public class QuestionDatabase {
 
     public void updateRecord(Question question) {
         try {
-            String updateStr = "UPDATE " + tableName + " SET QUESTION = ?, ANSWER = ?, ANSWERSTATEMENT = ? WHERE QUESTIONID = ?";
+            String updateStr = "UPDATE " + tableName + " SET QUESTION = ?, CORRECTANSWER = ?, SELECTION1 = ?, SELECTION2 = ?, SELECTION3 = ?, SELECTION4 = ? WHERE QUESTIONID = ?";
 
             stmt = conn.prepareStatement(updateStr);
 
             stmt.setString(1, question.getQuestion());
-            stmt.setInt(2, question.getAnswer());
-            stmt.setString(3, question.getAnswerStatement());
-            stmt.setInt(4, question.getQuestionID());
+            stmt.setInt(2, question.getCorrentAnswer());
+            stmt.setString(3, question.getSelection1());
+            stmt.setString(4, question.getSelection2());
+            stmt.setString(5, question.getSelection3());
+            stmt.setString(6, question.getSelection4());
+            stmt.setInt(7, question.getQuestionID());
             stmt.executeUpdate();
             
         } catch (SQLException ex) {

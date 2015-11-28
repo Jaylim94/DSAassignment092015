@@ -1,5 +1,5 @@
 
-package adt;
+package entity;
 /**
  *
  * @author Jaylim

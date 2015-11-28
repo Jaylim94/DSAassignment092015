@@ -17,11 +17,12 @@ public class PlayerDatabase {
         createConnection();
     }
 
-    public void addRecord(String name) {
-        String insertStr = "INSERT INTO " + tableName + " (PLAYERNAME) VALUES(?)";
+    public void addRecord(String name, long timeEnd) {
+        String insertStr = "INSERT INTO " + tableName + " (PLAYERNAME, TIMESPEND) VALUES(?, ?)";
         try {
             stmt = conn.prepareStatement(insertStr);
             stmt.setString(1, name);
+            stmt.setLong(2, timeEnd);
 
             stmt.executeUpdate();
         } catch (SQLException ex) {
@@ -38,7 +39,7 @@ public class PlayerDatabase {
             ResultSet rs = stmt.executeQuery();
             
             if (rs.next()) {
-                player = new Player(number, rs.getString("Name"));
+                player = new Player(number, rs.getString("PLAYERNAME"), rs.getLong("TIMESPEND"));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR getRecord Player", JOptionPane.ERROR_MESSAGE);
@@ -75,8 +76,8 @@ public class PlayerDatabase {
 
             stmt = conn.prepareStatement(updateStr);
 
-            stmt.setString(1, player.getName());
-            stmt.setInt(2, player.getNumber());
+            stmt.setString(1, player.getPlayerName());
+            stmt.setInt(2, player.getPlayerID());
             stmt.executeUpdate();
             
         } catch (SQLException ex) {

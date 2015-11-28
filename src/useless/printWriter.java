@@ -1,4 +1,4 @@
-package entity;
+package useless;
 
 
 import java.io.*;

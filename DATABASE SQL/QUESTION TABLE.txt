@@ -4,6 +4,9 @@ CREATE TABLE "QUESTION"
         GENERATED ALWAYS AS IDENTITY
         (START WITH 1, INCREMENT BY 1),   
     "QUESTION" varchar(100) NOT NULL,
-    "ANSWER" INT not null,
-    "ANSWERSTATEMENT" varchar(100) NOT NULL
+    "CORRECTANSWER" INT not null,
+    "SELECTION1" varchar(100) NOT NULL,
+    "SELECTION2" varchar(100) NOT NULL,
+    "SELECTION3" varchar(100) NOT NULL,
+    "SELECTION4" varchar(100) NOT NULL
 );

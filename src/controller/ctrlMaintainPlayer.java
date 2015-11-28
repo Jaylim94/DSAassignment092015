@@ -15,8 +15,8 @@ public class ctrlMaintainPlayer {
         return playerDA.getRecord(id);
     }
     
-    public void addRecord(String name) {
-        playerDA.addRecord(name);
+    public void addRecord(String name, long timeEnd) {
+        playerDA.addRecord(name, timeEnd);
     }
     
     public void updateRecord(Player p) {
